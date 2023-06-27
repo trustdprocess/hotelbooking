@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:new_app50/Authentication.dart';
+import 'package:new_app50/admin/admin.dart';
 import 'package:new_app50/forgotpass/phone.dart';
 import 'package:new_app50/homepage/homeanimation.dart';
 
@@ -20,6 +21,7 @@ class loginpage extends StatefulWidget {
 class _loginpageState extends State<loginpage> {
   final _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
+  bool _isAdmin = false;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   RegExp _emailRegex = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
@@ -32,22 +34,49 @@ class _loginpageState extends State<loginpage> {
     super.dispose();
   }
 
-  Future<void> _loginWithEmailPassword() async {
+  void _loginWithEmailPassword() {
     if (_formKey.currentState!.validate()) {
-      try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: _emailController.text, password: _passwordController.text);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Login Successful!")));
+      String email = _emailController.text;
+      String password = _passwordController.text;
+
+      if (email == "admin@example.com" && password == "admin123") {
+        _isAdmin = true;
+      }
+
+      if (_isAdmin) {
+        // Navigate to the admin panel screen
+        // Replace `AdminPanelScreen` with your desired admin panel screen
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => homeAnimation()),
+          MaterialPageRoute(builder: (_) => adminPanel()),
         );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Login Failed: Email and Password Incorrect")),
-        );
+      } else {
+        _signInWithEmailPassword();
       }
+    }
+  }
+
+  Future<void> _signInWithEmailPassword() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.toString(),
+        password: _passwordController.text.toString(),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Login Successful!")),
+      );
+
+      // Navigate to the home screen
+      // Replace `HomeAnimation` with your desired home screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => homeAnimation()),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Login Failed: Email and Password Incorrect")),
+      );
     }
   }
 
@@ -64,9 +93,7 @@ class _loginpageState extends State<loginpage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: 40,
-              ),
+              SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextFormField(
@@ -123,9 +150,7 @@ class _loginpageState extends State<loginpage> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20),
               InkWell(
                 onTap: _loginWithEmailPassword,
                 child: AnimatedContainer(
@@ -196,6 +221,11 @@ class _loginpageState extends State<loginpage> {
                       width: 80,
                     ),
                   ),
+                  if (_isAdmin) ...[
+                    Center(
+                      child: Text("Admin Panel"),
+                    )
+                  ]
                 ],
               ),
             ],
