@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:new_app50/Authentication.dart';
 import 'package:new_app50/admin/admin.dart';
 import 'package:new_app50/forgotpass/phone.dart';
 import 'package:new_app50/homepage/homeanimation.dart';
-
-import '../forgot/forgot.dart';
-import '../forgotpass/forgotpass.dart';
-import '../homepage/home.dart';
 import '../signup/signup.dart';
 
 class loginpage extends StatefulWidget {
@@ -75,7 +70,7 @@ class _loginpageState extends State<loginpage> {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Login Failed: Email and Password Incorrect")),
+        SnackBar(content: Text("Login Failed: Incorrect User Credentials")),
       );
     }
   }
@@ -213,19 +208,6 @@ class _loginpageState extends State<loginpage> {
                     ),
                   ),
                   SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Image.asset(
-                      "assets/facebook.jpg.avif",
-                      height: 80,
-                      width: 80,
-                    ),
-                  ),
-                  if (_isAdmin) ...[
-                    Center(
-                      child: Text("Admin Panel"),
-                    )
-                  ]
                 ],
               ),
             ],

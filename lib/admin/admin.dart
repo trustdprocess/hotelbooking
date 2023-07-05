@@ -34,6 +34,13 @@ class _adminPanelState extends State<adminPanel> {
               height: 20,
             ),
             ListTile(
+              leading: Icon(Icons.dashboard),
+              title: Text("Dashboard"),
+            ),
+              SizedBox(
+              height: 20,
+            ),
+            ListTile(
               leading: Icon(Icons.bookmarks),
               title: Text("Hotel Booked"),
               onTap: () {
@@ -63,6 +70,7 @@ class _adminPanelState extends State<adminPanel> {
                     context, MaterialPageRoute(builder: (_) => AnalyticsPage()));
               },
             ),
+            
           ],
         ),
       ),
