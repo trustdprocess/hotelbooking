@@ -7,14 +7,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:new_app50/ourservices/trips.dart';
 import 'package:path/path.dart' as path;
 
-class addhotels extends StatefulWidget {
-  const addhotels({Key? key}) : super(key: key);
+class addHotelsVacation extends StatefulWidget {
+  const addHotelsVacation({Key? key}) : super(key: key);
 
   @override
-  State<addhotels> createState() => _addhotelsState();
+  State<addHotelsVacation> createState() => _addHotelsVacationState();
 }
 
-class _addhotelsState extends State<addhotels> {
+class _addHotelsVacationState extends State<addHotelsVacation> {
   final formKey = GlobalKey<FormState>();
   List<File?> _images = List.generate(4, (_) => null);
   List<String> _selectedAmenities = [];
@@ -57,7 +57,7 @@ class _addhotelsState extends State<addhotels> {
 
         // Create a new document in the "hotels" collection
         await FirebaseFirestore.instance
-            .collection("hotels")
+            .collection("vacations")
             .doc(_hotelNameController.text)
             .set({
           "hotelName": _hotelNameController.text,
@@ -120,7 +120,7 @@ class _addhotelsState extends State<addhotels> {
       key: formKey,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Add Hotels"),
+          title: Text("Add Vacations Hotels"),
           elevation: 0,
         ),
         body: SingleChildScrollView(
