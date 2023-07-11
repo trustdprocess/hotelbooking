@@ -48,7 +48,7 @@ class _vacationState extends State<vacation> {
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => vacationDetail()));
+                      context, MaterialPageRoute(builder: (_) => vacationDetail(vacations: vacations,)));
                 },
                 child: Card(
                   margin: EdgeInsets.all(10),
@@ -94,9 +94,9 @@ class _vacationState extends State<vacation> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (_) => vacationDetail()));
+                                              builder: (_) => vacationDetail(vacations: vacations,)));
                                     },
-                                    child: Text("See More")),
+                                    child: Text("See More >>")),
                               )
                             ],
                           ),

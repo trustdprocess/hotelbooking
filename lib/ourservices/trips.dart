@@ -102,7 +102,7 @@ class _tripsState extends State<trips> {
                                       ),
                                     );
                                   },
-                                  child: Text("See More"),
+                                  child: Text("See More >>"),
                                 ),
                               ),
                             ],

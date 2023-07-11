@@ -25,6 +25,7 @@ class _addhotelsState extends State<addhotels> {
   final TextEditingController _coordinatesController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _tripTypeController = TextEditingController();
+  TextEditingController _descController=TextEditingController();
 
   Future getImage(int index) async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -67,6 +68,7 @@ class _addhotelsState extends State<addhotels> {
           "coordinates": _coordinatesController.text,
           "price": _priceController.text,
           "tripType": _tripTypeController.text,
+          "Description":_descController.text.trim(),
           "amenities": _selectedAmenities,
           "images": imageUrls,
         });
@@ -152,8 +154,8 @@ class _addhotelsState extends State<addhotels> {
                           child: _images[i] != null
                               ? Image.file(
                                   _images[i]!,
-                                  height: 250,
-                                  width: 250,
+                                  height: 300,
+                                  width: 300,
                                   fit: BoxFit.fill,
                                 )
                               : Image.network(
@@ -242,6 +244,16 @@ class _addhotelsState extends State<addhotels> {
               CustomTextField(
                 controller: _tripTypeController,
                 title: "Quick Trip/Family Trip",
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "You Cannot Leave This Field Empty";
+                  }
+                  return null;
+                },
+              ),
+              CustomTextField(
+                controller: _descController,
+                title: "Description About Hotels",
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "You Cannot Leave This Field Empty";

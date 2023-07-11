@@ -25,6 +25,7 @@ class _addHotelsVacationState extends State<addHotelsVacation> {
   final TextEditingController _coordinatesController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _tripTypeController = TextEditingController();
+  TextEditingController _descController = TextEditingController();
 
   Future getImage(int index) async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -67,6 +68,7 @@ class _addHotelsVacationState extends State<addHotelsVacation> {
           "coordinates": _coordinatesController.text,
           "price": _priceController.text,
           "tripType": _tripTypeController.text,
+          "Description":_descController.text,
           "amenities": _selectedAmenities,
           "images": imageUrls,
         });
@@ -85,33 +87,28 @@ class _addHotelsVacationState extends State<addHotelsVacation> {
   Future<List<String>> uploadImagesToFirebaseStorage() async {
     List<String> imageUrls = [];
 
- try {
- for (File? image in _images) {
- if (image != null) {
+    try {
+      for (File? image in _images) {
+        if (image != null) {
+          String fileName = DateTime.now().millisecondsSinceEpoch.toString() +
+              path.basename(image.path);
 
- String fileName = DateTime.now().millisecondsSinceEpoch.toString() +
- path.basename(image.path);
+          Reference ref =
+              FirebaseStorage.instance.ref().child("images/$fileName");
+          UploadTask uploadTask = ref.putFile(image);
+          TaskSnapshot taskSnapshot = await uploadTask;
 
+          String imageUrl = await taskSnapshot.ref.getDownloadURL();
 
- Reference ref =
- FirebaseStorage.instance.ref().child("images/$fileName");
- UploadTask uploadTask = ref.putFile(image);
- TaskSnapshot taskSnapshot = await uploadTask;
+          imageUrls.add(imageUrl);
+        }
+      }
+    } catch (e) {
+      print("Error uploading images: $e");
+      rethrow;
+    }
 
- 
- String imageUrl = await taskSnapshot.ref.getDownloadURL();
-
-
- imageUrls.add(imageUrl);
- }
- }
- } catch (e) {
-
- print("Error uploading images: $e");
- rethrow;
- }
-
- return imageUrls;
+    return imageUrls;
   }
 
   @override
@@ -242,6 +239,16 @@ class _addHotelsVacationState extends State<addHotelsVacation> {
               CustomTextField(
                 controller: _tripTypeController,
                 title: "Quick Trip/Family Trip",
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "You Cannot Leave This Field Empty";
+                  }
+                  return null;
+                },
+              ),
+              CustomTextField(
+                controller: _descController,
+                title: "Description About Hotels",
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "You Cannot Leave This Field Empty";

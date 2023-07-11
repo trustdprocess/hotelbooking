@@ -24,22 +24,22 @@ class AuthService {
     );
   }
 
-  signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser =
-        await GoogleSignIn(scopes: <String>["email"]).signIn();
-    //obtaining the details from the request
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
-    //create new credential
+ signInWithGoogle() async {
+  final GoogleSignInAccount? googleUser = await GoogleSignIn(scopes: <String>["email"]).signIn();
+  
+  if (googleUser != null) {
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
-      
       idToken: googleAuth.idToken,
     );
-    //once signed in return the user credential
+    
     return await FirebaseAuth.instance.signInWithCredential(credential);
-   
+  } else {
+    throw Exception('Failed to sign in with Google.');
   }
+}
+
 
   signOut() {
     FirebaseAuth.instance.signOut();
