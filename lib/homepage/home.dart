@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:new_app50/admin/drawer/addhotels.dart';
 import 'package:new_app50/notification/notification.dart';
 import 'package:new_app50/ourservices/TravelArticles.dart';
 import 'package:new_app50/ourservices/trips.dart';
@@ -42,14 +43,14 @@ class _homepageState extends State<homepage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentindex,
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.home,color: Colors.black,), label: "Home"),
           BottomNavigationBarItem(
             icon: GestureDetector(
               onTap: () {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (_) => Explore()));
               },
-              child: Icon(Icons.explore),
+              child: Icon(Icons.explore,color: Colors.black,),
             ),
             label: "Explore",
           ),
@@ -59,10 +60,13 @@ class _homepageState extends State<homepage> {
                 Navigator.push(
                     context, MaterialPageRoute(builder: (_) => profile()));
               },
-              child: Icon(Icons.face),
+              child: Icon(Icons.face,color: Colors.black),
             ),
             label: "Profile",
           ),
+          
+           
+          
         ],
         onTap: (value) {
           setState(() {

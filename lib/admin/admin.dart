@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app50/admin/drawer/addhotels.dart';
+import 'package:new_app50/admin/drawer/addvacation.dart';
 import 'package:new_app50/admin/drawer/hotelbooked.dart';
 import 'package:new_app50/admin/drawer/analytics.dart';
 
@@ -34,6 +35,13 @@ class _adminPanelState extends State<adminPanel> {
               height: 20,
             ),
             ListTile(
+              leading: Icon(Icons.dashboard),
+              title: Text("Dashboard"),
+            ),
+              SizedBox(
+              height: 20,
+            ),
+            ListTile(
               leading: Icon(Icons.bookmarks),
               title: Text("Hotel Booked"),
               onTap: () {
@@ -55,6 +63,17 @@ class _adminPanelState extends State<adminPanel> {
             SizedBox(
               height: 20,
             ),
+              ListTile(
+              leading: Icon(Icons.add_outlined),
+              title: Text("Add vacation Hotels"),
+              onTap: () {
+                                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => addHotelsVacation()));
+              },
+            ),
+             SizedBox(
+              height: 20,
+            ),
             ListTile(
               leading: Icon(Icons.analytics),
               title: Text("Analytics"),
@@ -63,6 +82,8 @@ class _adminPanelState extends State<adminPanel> {
                     context, MaterialPageRoute(builder: (_) => AnalyticsPage()));
               },
             ),
+           
+            
           ],
         ),
       ),

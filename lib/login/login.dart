@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:new_app50/Authentication.dart';
 import 'package:new_app50/admin/admin.dart';
 import 'package:new_app50/forgotpass/phone.dart';
 import 'package:new_app50/homepage/homeanimation.dart';
-
-import '../forgot/forgot.dart';
-import '../forgotpass/forgotpass.dart';
-import '../homepage/home.dart';
 import '../signup/signup.dart';
 
 class loginpage extends StatefulWidget {
@@ -34,49 +29,42 @@ class _loginpageState extends State<loginpage> {
     super.dispose();
   }
 
-  void _loginWithEmailPassword() {
+  void _loginWithEmailPassword() async {
     if (_formKey.currentState!.validate()) {
       String email = _emailController.text;
       String password = _passwordController.text;
 
-      if (email == "admin@example.com" && password == "admin123") {
-        _isAdmin = true;
-      }
-
-      if (_isAdmin) {
-        // Navigate to the admin panel screen
-        // Replace `AdminPanelScreen` with your desired admin panel screen
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => adminPanel()),
+      try {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password,
         );
-      } else {
-        _signInWithEmailPassword();
+
+        User? user = userCredential.user;
+
+        if (user != null) {
+          if (user.email == "admin@example.com") {
+            // Navigate to the admin panel screen
+            // Replace `AdminPanelScreen` with your desired admin panel screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => adminPanel()),
+            );
+          } else {
+            // Navigate to the home screen for regular users
+            // Replace `HomeAnimation` with your desired home screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => homeAnimation()),
+            );
+          }
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Login Failed: Incorrect User Credentials")),
+        );
       }
-    }
-  }
-
-  Future<void> _signInWithEmailPassword() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.toString(),
-        password: _passwordController.text.toString(),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Login Successful!")),
-      );
-
-      // Navigate to the home screen
-      // Replace `HomeAnimation` with your desired home screen
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => homeAnimation()),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Login Failed: Email and Password Incorrect")),
-      );
     }
   }
 
@@ -190,7 +178,7 @@ class _loginpageState extends State<loginpage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => forgot()),
+                    MaterialPageRoute(builder: (_) =>forgot ()),
                   );
                 },
                 child: Text("Don't Have an account?"),
@@ -213,19 +201,6 @@ class _loginpageState extends State<loginpage> {
                     ),
                   ),
                   SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Image.asset(
-                      "assets/facebook.jpg.avif",
-                      height: 80,
-                      width: 80,
-                    ),
-                  ),
-                  if (_isAdmin) ...[
-                    Center(
-                      child: Text("Admin Panel"),
-                    )
-                  ]
                 ],
               ),
             ],

@@ -24,8 +24,11 @@ class _profileState extends State<profile> {
         title: Text("Profile"),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [IconButton(onPressed:_logout, icon: Icon(Icons.exit_to_app))],
+        
+
+        children: [
+          
+          IconButton(onPressed:_logout, icon: Icon(Icons.exit_to_app))],
       ),
     );
   }

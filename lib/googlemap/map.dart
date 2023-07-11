@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -41,6 +40,7 @@ class MapSampleState extends State<MapSample> {
   var uuid = Uuid();
   String _sessionToken = "1234";
   List<dynamic> _placeList = [];
+  LatLng _markerCoordinates = LatLng(0, 0); // Added line
 
   @override
   void initState() {
@@ -80,7 +80,7 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Search")),
+      appBar: AppBar(title: Text("Search"),elevation: 0,),
       body: Column(
         children: [
           Row(
@@ -108,7 +108,12 @@ class MapSampleState extends State<MapSample> {
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
               },
-              markers: Set<Marker>.of(_marker),
+              markers: Set<Marker>.of([
+                Marker(
+                  markerId: MarkerId('hotel'),
+                  position: _markerCoordinates,
+                ),
+              ]),
               myLocationEnabled: true,
               myLocationButtonEnabled: false,
             ),

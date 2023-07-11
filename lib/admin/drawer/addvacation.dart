@@ -7,14 +7,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:new_app50/ourservices/trips.dart';
 import 'package:path/path.dart' as path;
 
-class addhotels extends StatefulWidget {
-  const addhotels({Key? key}) : super(key: key);
+class addHotelsVacation extends StatefulWidget {
+  const addHotelsVacation({Key? key}) : super(key: key);
 
   @override
-  State<addhotels> createState() => _addhotelsState();
+  State<addHotelsVacation> createState() => _addHotelsVacationState();
 }
 
-class _addhotelsState extends State<addhotels> {
+class _addHotelsVacationState extends State<addHotelsVacation> {
   final formKey = GlobalKey<FormState>();
   List<File?> _images = List.generate(4, (_) => null);
   List<String> _selectedAmenities = [];
@@ -25,7 +25,7 @@ class _addhotelsState extends State<addhotels> {
   final TextEditingController _coordinatesController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _tripTypeController = TextEditingController();
-  TextEditingController _descController=TextEditingController();
+  TextEditingController _descController = TextEditingController();
 
   Future getImage(int index) async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -58,7 +58,7 @@ class _addhotelsState extends State<addhotels> {
 
         // Create a new document in the "hotels" collection
         await FirebaseFirestore.instance
-            .collection("hotels")
+            .collection("vacations")
             .doc(_hotelNameController.text)
             .set({
           "hotelName": _hotelNameController.text,
@@ -68,7 +68,7 @@ class _addhotelsState extends State<addhotels> {
           "coordinates": _coordinatesController.text,
           "price": _priceController.text,
           "tripType": _tripTypeController.text,
-          "Description":_descController.text.trim(),
+          "Description":_descController.text,
           "amenities": _selectedAmenities,
           "images": imageUrls,
         });
@@ -87,33 +87,28 @@ class _addhotelsState extends State<addhotels> {
   Future<List<String>> uploadImagesToFirebaseStorage() async {
     List<String> imageUrls = [];
 
- try {
- for (File? image in _images) {
- if (image != null) {
+    try {
+      for (File? image in _images) {
+        if (image != null) {
+          String fileName = DateTime.now().millisecondsSinceEpoch.toString() +
+              path.basename(image.path);
 
- String fileName = DateTime.now().millisecondsSinceEpoch.toString() +
- path.basename(image.path);
+          Reference ref =
+              FirebaseStorage.instance.ref().child("images/$fileName");
+          UploadTask uploadTask = ref.putFile(image);
+          TaskSnapshot taskSnapshot = await uploadTask;
 
+          String imageUrl = await taskSnapshot.ref.getDownloadURL();
 
- Reference ref =
- FirebaseStorage.instance.ref().child("images/$fileName");
- UploadTask uploadTask = ref.putFile(image);
- TaskSnapshot taskSnapshot = await uploadTask;
+          imageUrls.add(imageUrl);
+        }
+      }
+    } catch (e) {
+      print("Error uploading images: $e");
+      rethrow;
+    }
 
- 
- String imageUrl = await taskSnapshot.ref.getDownloadURL();
-
-
- imageUrls.add(imageUrl);
- }
- }
- } catch (e) {
-
- print("Error uploading images: $e");
- rethrow;
- }
-
- return imageUrls;
+    return imageUrls;
   }
 
   @override
@@ -122,7 +117,7 @@ class _addhotelsState extends State<addhotels> {
       key: formKey,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Add Hotels"),
+          title: Text("Add Vacations Hotels"),
           elevation: 0,
         ),
         body: SingleChildScrollView(
@@ -154,8 +149,8 @@ class _addhotelsState extends State<addhotels> {
                           child: _images[i] != null
                               ? Image.file(
                                   _images[i]!,
-                                  height: 300,
-                                  width: 300,
+                                  height: 250,
+                                  width: 250,
                                   fit: BoxFit.fill,
                                 )
                               : Image.network(
